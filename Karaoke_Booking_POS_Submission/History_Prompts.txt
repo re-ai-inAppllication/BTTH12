@@ -1,0 +1,44 @@
+﻿LỊCH SỬ PROMPT — KARAOKE BOOKING & POS
+Mục tiêu: thể hiện Iterative Prompting; chỉ lưu prompt, không lưu câu trả lời AI.
+
+PROMPT 01 — KHỞI TẠO VAI TRÒ VÀ MỤC TIÊU
+Bạn là Senior IT Consultant kiêm System Analyst, có kinh nghiệm thiết kế hệ thống quản lý chuỗi karaoke. Mục tiêu là đồng hành với tôi xây dựng SRS tiếng Việt theo cấu trúc IEEE 29148 rút gọn. Chưa viết SRS ngay. Trước tiên hãy liệt kê các câu hỏi làm rõ quan trọng về phạm vi, actors, booking, POS, thanh toán và báo cáo; đồng thời chỉ ra các giả định có rủi ro.
+
+PROMPT 02 — CHỐT BỐI CẢNH VÀ GIẢ ĐỊNH
+Dựa trên câu hỏi vừa nêu, hãy dùng các quyết định sau: hệ thống phục vụ chuỗi nhiều chi nhánh; có 5 actor gồm Khách hàng, Lễ tân/Thu ngân, Nhân viên phục vụ, Quản lý chi nhánh, Quản trị hệ thống; tiền tệ VND; múi giờ Việt Nam. Phạm vi gồm Booking & Room, POS & Service, Billing & Payment, Administration, Reporting. Ngoài phạm vi: điều khiển thiết bị karaoke, bản quyền bài hát, kế toán tổng hợp. Hãy lập bảng in-scope/out-of-scope, assumptions và 8 rủi ro cần xác nhận. Không tự mở rộng ngoài dữ kiện.
+
+PROMPT 03 — PHÂN TÍCH ACTOR VÀ USER STORY
+Hãy phân tích mục tiêu, quyền hạn và pain point của từng actor. Sau đó viết tối thiểu 12 user stories theo mẫu “Là..., tôi muốn..., để...”, gắn mã US-xx và ưu tiên MoSCoW. Kiểm tra để mỗi module có ít nhất 2 user stories và không trao quyền quản trị cho actor nghiệp vụ.
+
+PROMPT 04 — YÊU CẦU CHỨC NĂNG CÓ THỂ KIỂM THỬ
+Từ user stories, tạo danh sách yêu cầu chức năng FR-01... theo từng module. Với mỗi yêu cầu phải có: actor, tiền điều kiện, kích hoạt, luồng chính đánh số, luồng thay thế/ngoại lệ, hậu điều kiện và dữ liệu vào/ra. Dùng động từ “hệ thống phải”; tránh các từ mơ hồ như nhanh, tiện lợi, thân thiện. Chỉ ra user story nào chưa được bao phủ.
+
+PROMPT 05 — REVIEW LOGIC BOOKING VÀ CẠNH TRANH
+Đóng vai reviewer khó tính. Rà soát phần Booking để tìm lỗi trùng lịch, race condition, khách walk-in, đến sớm/muộn, no-show, hủy, cọc thất bại và chuyển phòng. Đề xuất trạng thái Booking/Room/Session cùng các chuyển trạng thái hợp lệ. Sau đó sửa các FR liên quan, bảo đảm hai yêu cầu đồng thời không thể giữ cùng một phòng.
+
+PROMPT 06 — LÀM SÂU POS, TỒN KHO VÀ THANH TOÁN
+Rà soát POS và Billing cho các edge case: hết món trong lúc đặt, hủy món đang chế biến, tách nhiều order, nhiều phương thức thanh toán, tiền cọc, hoàn tiền, gateway timeout và người dùng bấm thanh toán lặp. Bổ sung quy tắc tồn kho không âm, idempotency key và trạng thái Payment PENDING/SUCCESS/FAILED/REFUNDED. Cập nhật yêu cầu tương ứng.
+
+PROMPT 07 — QUY TẮC NGHIỆP VỤ
+Hãy tổng hợp tối thiểu 8 business rules có mã BR-xx cho xung đột lịch, thời hạn giữ booking, chính sách hoàn cọc, cách tính tiền theo khung giờ, làm tròn VND, giảm giá/thuế, tồn kho và ghi audit. Mỗi quy tắc phải đơn nghĩa và có ví dụ số nếu có phép tính. Nêu rõ quy tắc nào cần cấu hình thay vì hard-code.
+
+PROMPT 08 — USE CASE DIAGRAM
+Tạo Mermaid use case diagram (hoặc flowchart mô phỏng use case nếu Mermaid không hỗ trợ cú pháp) cho 5 actor và các chức năng chính. Bảo đảm Quản lý chi nhánh có quản lý phòng/bảng giá/menu/báo cáo; Quản trị hệ thống có người dùng/RBAC; Khách hàng không được thanh toán tại quầy với quyền thu ngân. Sau sơ đồ, lập bảng kiểm để phát hiện actor hoặc use case bị thiếu.
+
+PROMPT 09 — ERD VÀ DATA DICTIONARY
+Thiết kế ERD logical cho tối thiểu các thực thể Branch, RoomType, Room, Customer, Booking, Session, Product, Order, OrderItem, Invoice, Payment, Staff, Role. Ghi rõ PK, FK, unique, nullability và quan hệ 1-N/N-N. Xử lý N-N Order–Product qua OrderItem; cho phép một Invoice có nhiều Payment; ngăn booking trùng lịch bằng constraint/transaction phù hợp. Không lưu tiền bằng float.
+
+PROMPT 10 — NFR ĐỊNH LƯỢNG
+Viết NFR có mã NFR-xx theo nhóm hiệu năng, sẵn sàng, bảo mật, RBAC, audit, mở rộng, khả dụng, tương thích, backup, quan sát và riêng tư. Mọi NFR phải đo được: dùng P95, số concurrent users, uptime, RTO, RPO, retention, thời gian cảnh báo. Nếu một con số chỉ là giả định, đánh dấu “cần xác nhận với stakeholder”.
+
+PROMPT 11 — EXCEPTION VÀ ACCEPTANCE CRITERIA
+Tạo bảng xử lý ngoại lệ cho ít nhất 8 tình huống nguy hiểm. Sau đó viết acceptance criteria dạng Given–When–Then cho các luồng: tìm phòng trống, HOLD hết hạn, đặt đồng thời, checkout, QR timeout, phân quyền chéo chi nhánh, hoàn cọc và hết tồn. Tiêu chí phải có kết quả quan sát được, không chỉ nói “hoạt động đúng”.
+
+PROMPT 12 — REVIEW TRUY VẾT VÀ SỬA THIẾU SÓT
+Lập ma trận truy vết User Story → Functional Requirement → Business Rule/NFR → Acceptance Criteria. Đánh dấu mọi yêu cầu mồ côi hoặc user story chưa có kiểm thử. Hãy sửa các khoảng trống trước khi trả bản cuối; không bịa thêm actor hoặc module.
+
+PROMPT 13 — BIÊN TẬP SRS CUỐI
+Hợp nhất kết quả thành SRS tiếng Việt chuyên nghiệp gồm: Giới thiệu, Tổng quan, Actors, Modules, User Stories, Functional Requirements, Business Rules, State Models, Use Case, ERD, NFR, Exception Handling, Acceptance Criteria và Traceability Matrix. Dùng thuật ngữ nhất quán, bảng dễ đọc, không để lại lời dẫn hội thoại như “Here is.../Hy vọng hữu ích”. Các sơ đồ phải có chú thích để tôi render thành ảnh khi đưa vào DOCX.
+
+PROMPT 14 — KIỂM ĐỊNH CUỐI THEO RUBRIC
+Đóng vai giảng viên chấm bài theo thang 100: Prompting 30, Logic nghiệp vụ 30, Mermaid/kiến trúc 20, Trình bày 20. Hãy audit bản SRS: (1) đủ ≥3 modules và ≥3 actors, (2) Use Case đúng quyền, (3) ERD đúng cardinality và khóa, (4) NFR đo được, (5) không có lỗi format AI, (6) sơ đồ đã được render thành ảnh. Chỉ trả checklist Pass/Fail và danh sách chỉnh sửa bắt buộc theo mức nghiêm trọng.
